@@ -22,6 +22,8 @@
 
     Is this a valid argument? (Yes/No) Why or why not?
 
+    > No. Inputs should be sanitized before being placed into the database but they should also be properly sanitized (encoded) for whatever context they will be placed in. For instance, if the context is into HTML then the output should be properly encoded for HTML.
+
 2. You and a friend decide to build an internal dashboard that will show real-time HTTP requests that are being sent by visitors to your site. The dashboard displays information about each HTTP request received by the web server, including the client's IP address, HTTP method, URL, query parameters, referrer URL, and user agent name.
 
     Incidentally, this is the exact set of information that most popular web servers like Nginx or Apache print into the server log files. Here is what one line from such a log file looks like:
@@ -34,7 +36,13 @@
 
     Is this a valid argument? (Yes/No) Why or why not?
 
+    > No. It doesn't matter wether the dashboard is internal or not. A successful XSS payload can be created that exfiltrates data to an external server by manipulating the URL, query parameters, user agent name or referer header. Although the dashboard itself is only used internally, the data itself is being provided by the user. 
+
 3. Name a real-world case where adherence to the Robustness principle (a.k.a. Postel's law) caused a system to have worse security. Explain how the Robustness principle led to the system having worse security properties.
+
+    > Postel's law states that you should "be conservative in what you do, be liberal in what you accept from others", meaning that you should accept all data that you can understand, but be careful in how you proccess it. While the idea may seem good, it can lead to unintended consequences where data is interpreted in a different way than was originally intended, causing quirky behavior or being leveraged by attackers. One example of this in the real world, occured in 2009 when SSL certificate authorities were issuing certificates for web domains that contained the ASCII null character. Malicious groups were taking advantage of this behaviour by registering domains such as "gmail.com0.attacker.com". While this should have considered a sub-domain of "attacker.com", many browsers interpreted the certificate as belonging to Google. For more on this example read the following article:
+
+    ["Postel's Law and Network Security" by Trevor Jim](http://trevorjim.com/postels-law-and-network-security/ "Article on Postels Law by Trevor Jim")
 
 [BACK TO TOP](#assignment-2-–-oh-what-a-tangled-web-we-weave "Jump To Top")
 
