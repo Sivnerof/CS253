@@ -52,6 +52,12 @@
 
 4. Name three ways that the Same Origin Policy protects a website.
 
+    > By not allowing access to the contents of an iframe unless they are from the same origin.
+
+    > By not allowing XMLHttpRequests.
+
+    > By not allowing cookies to be accessed by pages with a different origin.
+
 5. Can JavaScript code running on attacker.com cause a GET request to be sent to a URL on victim.com? (Yes/No)
 
 6. Can JavaScript code running on attacker.com use the fetch() API to send a GET request to victim.com and read the HTTP response body? (Yes/No)
